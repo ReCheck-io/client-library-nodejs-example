@@ -130,7 +130,10 @@ async function doUploadData(password) {
   try {
     // Run store function which actually stores file
     let response = await store(fileObject, userPublicAddress, userPublicEncrKey);
-    console.log('response', response);
+    if (response && response.dataId) {
+      console.log('Upload response:', response);
+      console.log('Upload successfull!');
+    }
   } catch (error) {
     console.log('doUploadData error:', error);
   }

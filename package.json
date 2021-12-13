@@ -1,19 +1,18 @@
 {
-  "name": "nodejs-example",
   "version": "1.0.0",
-  "description": "",
+  "name": "client-library-nodejs-example",
+  "description": "Simple Node.js example for recheck-clientjs-library usage with operations for creating identity, login and upload data",
+  "author": "ReCheck B.V. <info@recheck.io>",
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^2.0.15"
+    "start": "node index.js"
   },
   "dependencies": {
     "aes256": "^1.1.0",
     "recheck-clientjs-library": "^1.0.22-beta.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

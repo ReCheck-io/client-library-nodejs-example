@@ -59,7 +59,7 @@ async function checkPassword(password) {
   const decryptedWallet = decrypt(password, wallet.encryptedWallet);
 
   // Check if decrypted string's hash is equal to the hash we got before encrypting the object
-  // This way we are validating is password is valid
+  // This way we are validating the password
   return getHash(decryptedWallet) === wallet.walletSha3;
 }
 
