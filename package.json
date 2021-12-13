@@ -1,0 +1,19 @@
+{
+  "name": "nodejs-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "aes256": "^1.1.0",
+    "recheck-clientjs-library": "^1.0.22-beta.5"
+  }
+}
