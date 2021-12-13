@@ -12,6 +12,6 @@
 npm install
 
 
-# Run program which will create identity, login upload file automatically
+# Run program which will create identity, login and upload file automatically
 npm run start
 ```
