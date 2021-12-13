@@ -5,8 +5,6 @@
 - Identities encrypted/stored on the File System
 - Data for upload is read from File System
 
-- Added few helper functions
-
 ## How to use
 
 ```bash
