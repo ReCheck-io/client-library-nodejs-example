@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { encrypt } = require("aes256");
 const { init, login, store, newKeyPair, getHash } = require("recheck-clientjs-library");
 
@@ -18,7 +19,11 @@ async function go() {
   init(apiUrl, network)
 
   // Now after selectin blockchain network with init we can create identity
-  await createIdentity(password);
+  // Added check if we have alrady created identity skip creating new one
+  // this is to prevent filling up our beta platform with dummy identities
+  if (!fs.existsSync('./user.re')) {
+    await createIdentity(password);
+  }
 
   await doLogin(password);
 
@@ -29,10 +34,6 @@ async function createIdentity(password) {
   // keyPair contains everything for identity
   const keyPair = await newKeyPair(null);
 
-  // Assign some data to a global variables for later usage
-  userPublicAddress = keyPair.address;
-  userPublicEncrKey = keyPair.publicEncKey;
-
   // Now identity should be encrypted with the user's password and stored securely
   // the cli tool creates and stores encrypted identity file on File System (we will use the same here for the example)
 
@@ -40,20 +41,10 @@ async function createIdentity(password) {
   const keyPairStr = JSON.stringify(keyPair);
   const encryptedWallet = encrypt(password, keyPairStr);
 
-  // Creating final object
-  const walletObject = {
-    encryptedWallet: encryptedWallet, // encrypted wallet string
-    publicAddress: keyPair.address, // users public address
-
-    // hash of stringified keyPair object 
-    // this will be used later for password validation
-    walletSha3: getHash(keyPairStr),
-  };
-
-  // Store securely this walletObject
+  // Store securely this encrypted string
   // In this example we will store files on the File System like Hammer CLI
   try {
-    const bytesWritten = writeBinaryFile('user.re', JSON.stringify(walletObject));
+    const bytesWritten = writeBinaryFile('user.re', encryptedWallet);
     if (bytesWritten < 1) {
       throw new Error("Unable to write account data.");
     } else {
@@ -78,7 +69,11 @@ async function doLogin(password) {
 
     console.log('wallet', wallet);
 
-    const loginResponse = await login(wallet.keyPair);
+    // Assign some data of last logged in used to a global variables for later usage
+    userPublicAddress = wallet.address;
+    userPublicEncrKey = wallet.publicEncKey;
+
+    const loginResponse = await login(wallet);
     console.log('loginResponse', loginResponse);
 
     if (loginResponse) {
@@ -130,8 +125,9 @@ async function doUploadData(password) {
   try {
     // Run store function which actually stores file
     let response = await store(fileObject, userPublicAddress, userPublicEncrKey);
+    console.log('Upload response:', response);
+    
     if (response && response.dataId) {
-      console.log('Upload response:', response);
       console.log('Upload successfull!');
     }
   } catch (error) {

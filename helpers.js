@@ -27,28 +27,24 @@ async function getWallet() {
   let encryptedIdentity = await readBinaryFile();
   
   if (encryptedIdentity && encryptedIdentity.binary) {
-    return JSON.parse(encryptedIdentity.binary) || {};
+    return encryptedIdentity.binary;
   }
 
   return false;
 }
 
 async function loadWallet(password) {
-  if (!(await checkPassword(password))) {
-    return false;
-  }
-
   const wallet = await getWallet();
 
   let keyPair = {};
-  if (wallet && wallet.publicAddress) {
-    const decryptedWallet = decrypt(password, wallet.encryptedWallet);
+  if (wallet) {
+    const decryptedWallet = decrypt(password, wallet);
     if (decryptedWallet) {
       keyPair = JSON.parse(decryptedWallet);
     }
   }
 
-  return { ...wallet, keyPair };
+  return keyPair;
 }
 
 async function checkPassword(password) {
@@ -56,11 +52,20 @@ async function checkPassword(password) {
   const wallet = await getWallet();
 
   // Decrypt wallet from stored wallet object
-  const decryptedWallet = decrypt(password, wallet.encryptedWallet);
-
-  // Check if decrypted string's hash is equal to the hash we got before encrypting the object
-  // This way we are validating the password
-  return getHash(decryptedWallet) === wallet.walletSha3;
+  const decryptedWallet = decrypt(password, wallet);
+  
+  try {
+    // Check if decrypted object has publicKey, etc..
+    // This way we are validating the password
+    let id = JSON.parse(decryptedWallet);
+    if (!id.address || !id.publicKey || !id.secretKey) {
+      return false
+    }
+    return true
+  } catch (error) {
+    console.log('checPassword error:', error)
+    return false
+  }
 }
 
 
