@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { encrypt } = require("aes256");
-const { init, login, store, newKeyPair, getHash } = require("recheck-clientjs-library");
+const { init, login, store, newKeyPair } = require("recheck-clientjs-library");
 
 const { writeBinaryFile, loadWallet, checkPassword, readBinaryFile } = require("./helpers");
 

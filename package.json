@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "aes256": "^1.1.0",
-    "recheck-clientjs-library": "^1.0.22-beta.5"
+    "recheck-clientjs-library": "^1.0.24-beta.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
