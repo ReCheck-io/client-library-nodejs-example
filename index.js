@@ -113,7 +113,7 @@ async function doUploadData(password) {
   const fileName = file.name.substring(0, file.name.lastIndexOf("."));
 
   let fileObject = {
-    payload: file.binary.toString("base64"),
+    payload: Buffer.from(file.binary).toString('base64'),
     dataName: fileName,
     dataExtension: fileExtension,
   };
